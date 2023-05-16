@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="country_name_size">20sp</dimen>
+    <dimen name="detail_label">18sp</dimen>
+    <dimen name="detail_country_name_size">24sp</dimen>
+
+    <dimen name="country_item_margin_top">20dp</dimen>
+    <dimen name="view_group_padding">16dp</dimen>
+</resources>
