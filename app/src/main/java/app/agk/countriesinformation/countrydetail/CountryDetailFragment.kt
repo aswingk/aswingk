@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class CountryDetailFragment : Fragment() {
     private lateinit var binding : CountryDetailInfoBinding
     private val args : CountryDetailFragmentArgs by navArgs()
-    val viewModel: CountryViewModel by activityViewModels {
+    val viewModel: CountryViewModel by viewModels {
         Injector.provideCountriesViewModelFactory(requireContext())
     }
 
@@ -65,13 +65,13 @@ class CountryDetailFragment : Fragment() {
         val countryName = args.countryName
         setCountryNameUI(countryName)
 
-        Log.d(TAG, "onViewCreated: countryName: ${countryName}")
+        Log.d(TAG, "onViewCreated: Vm: ${viewModel}")
+
         lifecycleScope.launch {
-            viewModel.detailUIState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            viewModel.fetchCountryData(countryName).flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect {
                     updateUI(it)
                 }
         }
-        viewModel.loadCountryData(countryName)
     }
 }

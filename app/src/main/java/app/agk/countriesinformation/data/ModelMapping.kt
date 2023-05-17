@@ -7,7 +7,7 @@ import java.util.UUID
 fun CountryInfo.asCountry() = Country(
     id = id,
     name = name,
-    capital = capital,
+    capital = capital?.joinToString(",") ?: "",
     population = population,
     area = area,
     region = region,

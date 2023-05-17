@@ -43,25 +43,6 @@ internal class CountryViewModelTest{
     }
 
     @Test
-    fun loadCountryList() = runTest{
-        val actualList = listOf("USA", "Antarctica")
-        var newList = listOf<String>()
-        val job = launch {
-            countryViewModel.fetchList {
-                actualList
-            }.collect {
-                newList = it
-            }
-        }
-
-        advanceUntilIdle()
-
-        assertEquals(newList, actualList)
-
-        job.cancel()
-    }
-
-    @Test
     fun loadCountryUnavailable() = runTest {
         var isLoading = true
         var region = ""
@@ -74,14 +55,14 @@ internal class CountryViewModelTest{
 
         Assert.assertTrue(isLoading)
         assertEquals(region,"")
-        countryViewModel.loadCountryData("Dummy")
+        countryViewModel.fetchCountryData("Dummy")
 
         // Execute pending coroutines actions
         advanceUntilIdle()
 
         assertEquals(region,"")
 
-        countryViewModel.loadCountryData(country.name)
+        countryViewModel.fetchCountryData(country.name)
         // Execute pending coroutines actions
         advanceUntilIdle()
 
@@ -101,7 +82,7 @@ internal class CountryViewModelTest{
             }
         }
 
-        countryViewModel.loadCountryData(country.name)
+        countryViewModel.fetchCountryData(country.name)
 
         // Execute pending coroutines actions
         advanceUntilIdle()
@@ -131,7 +112,7 @@ internal class CountryViewModelTest{
         // Given a repository that throws errors
         countryRepository.setShouldThrowError(true)
 
-        countryViewModel.loadCountryData("Dummy")
+        countryViewModel.fetchCountryData("Dummy")
 
         // Execute pending coroutines actions
         advanceUntilIdle()
@@ -157,7 +138,7 @@ internal class CountryViewModelTest{
         // Then progress indicator is shown
         Assert.assertTrue(isLoading)
 
-        countryViewModel.loadCountryData(country.name)
+        countryViewModel.fetchCountryData(country.name)
 
         // Execute pending coroutines actions
         advanceUntilIdle()

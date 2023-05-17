@@ -6,20 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.agk.countriesinformation.R
 import app.agk.countriesinformation.databinding.CountryInfoBinding
-import app.agk.countriesinformation.utils.Injector
 
 class CountryFragment : Fragment() {
     private lateinit var binding : CountryInfoBinding
-    val viewModel: CountryViewModel by activityViewModels {
-        Injector.provideCountriesViewModelFactory(requireContext())
-    }
+    val viewModel: CountryListViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -3,10 +3,9 @@ package app.agk.countriesinformation.countryinfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.agk.countriesinformation.R
-import app.agk.countriesinformation.data.Country
 import app.agk.countriesinformation.data.IRepository
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 data class DisplayCountryDetailsUiState(
     val capital: String = "",
@@ -22,62 +21,32 @@ class CountryViewModel internal constructor(
     private val repository: IRepository
 ) : ViewModel() {
 
-    private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
-    private val _isLoading = MutableStateFlow(false)
+    lateinit var detailUIState: StateFlow<DisplayCountryDetailsUiState>
 
-    private val _country: MutableStateFlow<Result<Country>?> = MutableStateFlow(null)
-
-    private val _listUIState = MutableStateFlow<List<String>>(listOf())
-
-    fun fetchList(loadListIfNeeded : () -> List<String>): StateFlow<List<String>> {
-        if(_listUIState.value.isEmpty()){
-            viewModelScope.launch {
-                _listUIState.value = loadListIfNeeded()
-            }
-        }
-        return _listUIState
-    }
-
-    val detailUIState: StateFlow<DisplayCountryDetailsUiState> = combine(
-        _userMessage, _isLoading, _country
-    ) { userMessage, isLoading, country ->
-
-        if (isLoading || country == null) return@combine DisplayCountryDetailsUiState(isLoading = true)
-
-        return@combine when (country.isSuccess) {
-            true -> {
-                DisplayCountryDetailsUiState(
-                    isLoading = false,
-                    capital = country.getOrNull()?.capital?.firstOrNull() ?: "",
-                    population = "${country.getOrNull()?.population}",
-                    area = "${country.getOrNull()?.area}",
-                    region = country.getOrNull()?.region ?: "",
-                    subregion = country.getOrNull()?.subregion ?: "",
-                )
-            } false -> {
-                DisplayCountryDetailsUiState(
-                    isLoading = false,
-                    userMessage = userMessage
-                )
-            }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = DisplayCountryDetailsUiState(isLoading = true)
-    )
-
-    fun loadCountryData(countryName: String) = viewModelScope.launch {
-        repository.fetchCountryInfo(countryName)
+    fun fetchCountryData(countryName: String): StateFlow<DisplayCountryDetailsUiState> {
+        detailUIState = repository.fetchCountryInfo(countryName)
             .map {
-                if (it != null) {
-                    _country.value = Result.success(it)
-                    _isLoading.value = false
-                }
+                return@map if (it != null) {
+                    DisplayCountryDetailsUiState(
+                        isLoading = false,
+                        capital = it.capital,
+                        population = "${it.population}",
+                        area = "${it.area}",
+                        region = it.region ?: "",
+                        subregion = it.subregion ?: "",
+                    )
+                } else DisplayCountryDetailsUiState(isLoading = true)
             }.catch {
-                _userMessage.value = R.string.no_data
-                _country.value = Result.failure(it)
-                _isLoading.value = false
-            }.stateIn(viewModelScope)
+                var errorMsg = R.string.network_error
+                if(it is HttpException){
+                    errorMsg = R.string.no_data
+                }
+                emit(DisplayCountryDetailsUiState(userMessage = errorMsg))
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = DisplayCountryDetailsUiState(isLoading = true)
+            )
+        return detailUIState
     }
 }
