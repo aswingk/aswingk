@@ -11,14 +11,15 @@ interface CountryItemClickListener {
     fun navigateToDetailView(countryName: String)
 }
 
-class DiffUtils : DiffUtil.ItemCallback<String>(){
+class CountryDiffUtil : DiffUtil.ItemCallback<String>(){
     override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
     override fun areContentsTheSame(oldItem: String, newItem: String) = oldItem == newItem
 }
 
-class CountryInfoAdapter(val countryItemClickListener : CountryItemClickListener) : ListAdapter<String, CountryInfoAdapter.CountryInfoViewHolder>(DiffUtils()) {
+class CountryAdapter(private val countryItemClickListener : CountryItemClickListener)
+    : ListAdapter<String, CountryAdapter.CountryViewHolder>(CountryDiffUtil()) {
 
-    inner class CountryInfoViewHolder(
+    inner class CountryViewHolder(
         private val binding : CountryItemInfoBinding): ViewHolder(binding.root){
         init {
             binding.root.setOnClickListener {
@@ -32,16 +33,16 @@ class CountryInfoAdapter(val countryItemClickListener : CountryItemClickListener
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryInfoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
         val binding = CountryItemInfoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
 
-        return CountryInfoViewHolder(binding)
+        return CountryViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CountryInfoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         val item = getItem(position)
         holder.updateUI(item)
     }

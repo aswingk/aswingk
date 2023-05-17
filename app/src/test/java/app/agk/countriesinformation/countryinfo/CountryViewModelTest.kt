@@ -5,7 +5,9 @@ import app.agk.countriesinformation.data.asCountry
 import app.agk.countriesinformation.utils.FakeRepository
 import app.agk.countriesinformation.utils.MainCoroutineRule
 import app.agk.countriesinformation.utils.getCountryInfo
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -18,6 +20,7 @@ import org.junit.Test
 
 //@RunWith(PowerMockRunner::class)
 //@PrepareForTest(Log::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class CountryViewModelTest{
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
@@ -40,30 +43,49 @@ internal class CountryViewModelTest{
     }
 
     @Test
+    fun loadCountryList() = runTest{
+        val actualList = listOf("USA", "Antarctica")
+        var newList = listOf<String>()
+        val job = launch {
+            countryViewModel.fetchList {
+                actualList
+            }.collect {
+                newList = it
+            }
+        }
+
+        advanceUntilIdle()
+
+        assertEquals(newList, actualList)
+
+        job.cancel()
+    }
+
+    @Test
     fun loadCountryUnavailable() = runTest {
         var isLoading = true
         var region = ""
         val job = launch {
-            countryViewModel.uiState.collect {
+            countryViewModel.detailUIState.collect {
                 region = it.region
                 isLoading = it.isLoading
             }
         }
 
         Assert.assertTrue(isLoading)
-        Assert.assertTrue(region == "")
+        assertEquals(region,"")
         countryViewModel.loadCountryData("Dummy")
 
         // Execute pending coroutines actions
         advanceUntilIdle()
 
-        Assert.assertTrue(region == "")
+        assertEquals(region,"")
 
         countryViewModel.loadCountryData(country.name)
         // Execute pending coroutines actions
         advanceUntilIdle()
 
-        Assert.assertTrue(region == country.region)
+        assertEquals(region, country.region)
 
         job.cancel()
     }
@@ -74,7 +96,7 @@ internal class CountryViewModelTest{
 
         var uiState : DisplayCountryDetailsUiState? = null
         val job = launch {
-            countryViewModel.uiState.collect {
+            countryViewModel.detailUIState.collect {
                 uiState = it
             }
         }
@@ -86,10 +108,10 @@ internal class CountryViewModelTest{
 
         // Then verify that the view was notified
         uiState?.apply {
-            Assert.assertTrue(region == country.region)
-            Assert.assertTrue(subregion == country.subregion)
-            Assert.assertTrue(population == "${country.population}")
-            Assert.assertTrue(area == "${country.area}")
+            assertEquals(region, country.region)
+            assertEquals(subregion, country.subregion)
+            assertEquals(population, "${country.population}")
+            assertEquals(area, "${country.area}")
         }
 
         job.cancel()
@@ -101,7 +123,7 @@ internal class CountryViewModelTest{
 
         var uiState : DisplayCountryDetailsUiState? = null
         val job = launch {
-            countryViewModel.uiState.collect {
+            countryViewModel.detailUIState.collect {
                 uiState = it
             }
         }
@@ -115,7 +137,7 @@ internal class CountryViewModelTest{
         advanceUntilIdle()
 
         assert(uiState?.isLoading == false)
-        assert(uiState?.userMessage == R.string.no_data)
+        assertEquals(uiState?.userMessage, R.string.no_data)
 
         job.cancel()
     }
@@ -127,7 +149,7 @@ internal class CountryViewModelTest{
 
         var isLoading = true
         val job = launch {
-            countryViewModel.uiState.collect {
+            countryViewModel.detailUIState.collect {
                 isLoading = it.isLoading
             }
         }

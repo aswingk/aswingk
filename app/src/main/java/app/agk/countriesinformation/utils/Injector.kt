@@ -1,7 +1,6 @@
 package app.agk.countriesinformation.utils
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import app.agk.countriesinformation.countryinfo.CountryViewModel
@@ -46,16 +45,3 @@ class CountriesViewModelFactory(private val repository : CountryRepository) : Vi
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T = CountryViewModel(repository) as T
 }
-
-private object Lock
-
-@VisibleForTesting
-private fun setInjectorForTesting(injector: DefaultViewModelProvider?) {
-    synchronized(Lock) {
-        currentInjector = injector ?: DefaultViewModelProvider()
-    }
-}
-
-@VisibleForTesting
-private fun resetInjector() =
-    setInjectorForTesting(null)

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/CountryInfoFragment"
-        android:name="app.agk.countriesinformation.countryinfo.CountryInfoFragment"
+        android:name="app.agk.countriesinformation.countryinfo.CountryFragment"
         android:label="@string/country_fragment_name">
 
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/CountryDetailInfoFragment"
-        android:name="app.agk.countriesinformation.countrydetail.CountryDetailInfoFragment"
+        android:name="app.agk.countriesinformation.countrydetail.CountryDetailFragment"
         android:label="@string/country_detail_fragment_name"
         tools:layout="@layout/country_detail_info">
 

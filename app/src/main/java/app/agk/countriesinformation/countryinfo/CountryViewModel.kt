@@ -27,7 +27,18 @@ class CountryViewModel internal constructor(
 
     private val _country: MutableStateFlow<Result<Country>?> = MutableStateFlow(null)
 
-    val uiState: StateFlow<DisplayCountryDetailsUiState> = combine(
+    private val _listUIState = MutableStateFlow<List<String>>(listOf())
+
+    fun fetchList(loadListIfNeeded : () -> List<String>): StateFlow<List<String>> {
+        if(_listUIState.value.isEmpty()){
+            viewModelScope.launch {
+                _listUIState.value = loadListIfNeeded()
+            }
+        }
+        return _listUIState
+    }
+
+    val detailUIState: StateFlow<DisplayCountryDetailsUiState> = combine(
         _userMessage, _isLoading, _country
     ) { userMessage, isLoading, country ->
 

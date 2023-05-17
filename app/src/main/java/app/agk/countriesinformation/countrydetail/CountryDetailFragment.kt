@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,16 +19,18 @@ import app.agk.countriesinformation.utils.Injector
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class CountryDetailInfoFragment : Fragment() {
+class CountryDetailFragment : Fragment() {
     private lateinit var binding : CountryDetailInfoBinding
-    private val viewModel: CountryViewModel by viewModels { Injector.provideCountriesViewModelFactory(requireContext()) }
-    private val args : CountryDetailInfoFragmentArgs by navArgs()
+    private val args : CountryDetailFragmentArgs by navArgs()
+    val viewModel: CountryViewModel by activityViewModels {
+        Injector.provideCountriesViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = CountryDetailInfoBinding.inflate(inflater)
         return binding.root
     }
@@ -55,7 +57,6 @@ class CountryDetailInfoFragment : Fragment() {
     }
 
     private fun setCountryNameUI(countryName: String) {
-        if (countryName.isEmpty()) return
         binding.countryName.setText(countryName)
     }
 
@@ -66,7 +67,7 @@ class CountryDetailInfoFragment : Fragment() {
 
         Log.d(TAG, "onViewCreated: countryName: ${countryName}")
         lifecycleScope.launch {
-            viewModel.uiState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            viewModel.detailUIState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .collect {
                     updateUI(it)
                 }
