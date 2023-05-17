@@ -6,11 +6,11 @@ import kotlinx.coroutines.withContext
 
 class LocalDataSource(private val countryDao: CountryDao) {
 
-    fun fetchCountryInfo(countryName: String) : Flow<CountryInfo?> {
+    fun fetchCountryInfo(countryName: String): Flow<CountryInfo?> {
         return countryDao.getCountryInfo(countryName)
     }
 
-    suspend fun addOrUpdateCountryInfo(countryInfo : CountryInfo){
+    suspend fun addOrUpdateCountryInfo(countryInfo: CountryInfo) {
         withContext(Dispatchers.IO) {
             countryDao.upsert(countryInfo)
         }

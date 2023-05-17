@@ -1,14 +1,17 @@
 package app.agk.countriesinformation.utils
 
 import app.agk.countriesinformation.data.source.local.CountryInfo
+import java.util.*
+
+private fun generateId() = UUID.randomUUID().toString()
 
 fun getCountryInfo() = CountryInfo(
-        id = "abc",
-        name = "country1",
-        population = 1_000L,
-        capital = listOf(),
+        id = generateId(),
+        name = "USA",
+        population = 1_000_000L,
+        capital = listOf("Atlanta"),
         area = 1230.0,
-        region = "region",
-        subregion = "subregion",
+        region = "Georgia",
+        subregion = "Peachtree Corners",
         mapInfoUrl = "mapUrl"
 )

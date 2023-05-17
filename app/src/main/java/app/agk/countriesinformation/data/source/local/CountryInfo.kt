@@ -3,20 +3,19 @@ package app.agk.countriesinformation.data.source.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = CountryInfo.TABLE_COUNTRIES)
 data class CountryInfo(
     @PrimaryKey
     val id : String,
-    val name: String = "Name",
-
+    val name: String,
     val capital : List<String>,
-    val population : Long = 20000L,
-    val area : Double = 34242.56,
+    val population : Long,
+    val area : Double,
     val region : String,
     val subregion : String,
     val mapInfoUrl : String
 ){
-    override fun toString(): String {
-        return name
+    companion object {
+        const val TABLE_COUNTRIES = "CountryInfo"
     }
 }

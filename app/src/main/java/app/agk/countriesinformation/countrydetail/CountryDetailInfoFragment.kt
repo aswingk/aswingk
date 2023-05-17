@@ -7,16 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import app.agk.countriesinformation.TAG
-import app.agk.countriesinformation.countryinfo.CountriesViewModel
-import app.agk.countriesinformation.data.source.local.CountryInfo
+import app.agk.countriesinformation.countryinfo.CountryViewModel
+import app.agk.countriesinformation.countryinfo.DisplayCountryDetailsUiState
 import app.agk.countriesinformation.databinding.CountryDetailInfoBinding
 import app.agk.countriesinformation.utils.Injector
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class CountryDetailInfoFragment : Fragment() {
     private lateinit var binding : CountryDetailInfoBinding
-    private val viewModel: CountriesViewModel by viewModels { Injector.provideCountriesViewModelFactory(requireContext()) }
+    private val viewModel: CountryViewModel by viewModels { Injector.provideCountriesViewModelFactory(requireContext()) }
     private val args : CountryDetailInfoFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -28,15 +33,25 @@ class CountryDetailInfoFragment : Fragment() {
         return binding.root
     }
 
-    private fun updateUI(countryInfo : CountryInfo){
-        setCountryNameUI(countryInfo.name)
-        binding.capitalName.setText(countryInfo.capital.run {
-            this?.firstOrNull() ?: ""
-        })
-        binding.population.setText("${countryInfo.population}")
-        binding.area.setText("${countryInfo.area}")
-        binding.region.setText(countryInfo.region)
-        binding.subRegion.setText(countryInfo.subregion)
+    private fun updateUI(displayCountryDetailsUiState : DisplayCountryDetailsUiState) {
+
+        if (displayCountryDetailsUiState.isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+            return
+        }
+
+        binding.progressBar.visibility = View.GONE
+        binding.capitalName.setText(displayCountryDetailsUiState.capital)
+        binding.population.setText(displayCountryDetailsUiState.population)
+        binding.area.setText(displayCountryDetailsUiState.area)
+        binding.region.setText(displayCountryDetailsUiState.region)
+        binding.subRegion.setText(displayCountryDetailsUiState.subregion)
+
+        displayCountryDetailsUiState.userMessage?.let {
+            Snackbar
+                .make(requireView(), it, Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
 
     private fun setCountryNameUI(countryName: String) {
@@ -50,10 +65,12 @@ class CountryDetailInfoFragment : Fragment() {
         setCountryNameUI(countryName)
 
         Log.d(TAG, "onViewCreated: countryName: ${countryName}")
-        viewModel.countryInfo(countryName).observe(viewLifecycleOwner, {
-            it?.let {
-                updateUI(it)
-            }
-        })
+        lifecycleScope.launch {
+            viewModel.uiState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect {
+                    updateUI(it)
+                }
+        }
+        viewModel.loadCountryData(countryName)
     }
 }

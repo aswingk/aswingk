@@ -1,11 +1,13 @@
 package app.agk.countriesinformation.countryinfo
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.agk.countriesinformation.R
 import app.agk.countriesinformation.databinding.CountryInfoBinding
@@ -27,8 +29,15 @@ class CountryInfoFragment : Fragment() {
         val countries = resources
             .getStringArray(R.array.countries_list)
 
+        val layoutMgr =
+            if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+                LinearLayoutManager(context)
+            } else {
+                GridLayoutManager(context, 2)
+            }
+
         binding.countriesRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this.context)
+            layoutManager = layoutMgr
             adapter = CountryInfoAdapter(object : CountryItemClickListener {
                 override fun navigateToDetailView(countryName: String) {
                     val action = CountryInfoFragmentDirections
@@ -39,14 +48,5 @@ class CountryInfoFragment : Fragment() {
                 it.submitList(countries.toList())
             }
         }
-
-/*        binding.fastScrollList.apply {
-            adapter = ArrayAdapter(this.context,
-                R.layout.country_item_info,
-                countries.map {
-                    it.get(0).toString()
-                }.distinct().toTypedArray()
-            )
-        }*/
     }
 }

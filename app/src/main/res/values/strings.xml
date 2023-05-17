@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Countries Information</string>
     <string name="action_settings">Settings</string>
+
     <!-- Strings used for fragments for navigation -->
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="country_fragment_name">Countries</string>
@@ -13,4 +15,5 @@
     <string name="subregion">SubRegion:</string>
     <string name="region">Region:</string>
 
+    <string name="no_data">Unable to fetch Country Details</string>
 </resources>

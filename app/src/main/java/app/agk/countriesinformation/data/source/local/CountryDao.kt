@@ -10,6 +10,6 @@ interface CountryDao {
     @Upsert
     suspend fun upsert(countryInfo: CountryInfo)
 
-    @Query("SELECT * FROM COUNTRYINFO WHERE name=:name")
+    @Query("SELECT * FROM ${CountryInfo.TABLE_COUNTRIES} WHERE name=:name")
     fun getCountryInfo(name: String): Flow<CountryInfo?>
 }
