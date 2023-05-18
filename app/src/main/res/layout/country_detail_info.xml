@@ -1,192 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:padding="@dimen/view_group_padding"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="@dimen/view_group_padding"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/countryName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:textSize="@dimen/detail_country_name_size"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Country Name"
-        />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/capitalLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/capital"
-        android:textSize="@dimen/detail_label"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintEnd_toStartOf="@+id/capitalName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/capitalName"
-        app:layout_constraintBottom_toBottomOf="@id/capitalName"
-        />
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dataGroup"
+            app:constraint_referenced_ids="area, areaLabel, capitalLabel, capitalName, population, populationLabel, region, regionLabel, subRegion, subRegionLabel"
+            />
 
-    <TextView
-        android:id="@+id/capitalName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/detail_label"
-        android:maxLines="3"
-        android:textAlignment="textEnd"
-        android:ellipsize="end"
-        android:layout_marginTop="@dimen/country_item_margin_top"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/capitalLabel"
-        app:layout_constraintTop_toBottomOf="@id/countryName"
-        android:text="@string/loading"
-        tools:text="Capital Name" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/errorMsg"
+            android:textSize="@dimen/country_name_size"
+            android:textAlignment="center"
+            android:padding="20dp"
+            android:textStyle="bold"
+            tools:text="Error msg will appear here"
+            app:layout_constraintTop_toBottomOf="@id/countryName"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
-    <TextView
-        android:id="@+id/populationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/population"
-        android:textSize="@dimen/detail_label"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintEnd_toStartOf="@id/population"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/population"
-        app:layout_constraintBottom_toBottomOf="@id/population"
-        />
+        <TextView
+            android:id="@+id/countryName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:textSize="@dimen/detail_country_name_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Country Name"
+            />
 
-    <TextView
-        android:id="@+id/population"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/detail_label"
-        android:layout_marginTop="@dimen/country_item_margin_top"
-        android:textAlignment="textEnd"
-        android:ellipsize="end"
-        android:maxLines="1"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/populationLabel"
-        app:layout_constraintTop_toBottomOf="@id/capitalName"
-        app:layout_constraintBottom_toTopOf="@id/area"
-        android:text="@string/loading"
-        tools:text="Population No"
-        />
+        <TextView
+            android:id="@+id/capitalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/capital"
+            android:textSize="@dimen/detail_label"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@+id/capitalName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/capitalName"
+            app:layout_constraintBottom_toBottomOf="@id/capitalName"
+            />
 
-    <TextView
-        android:id="@+id/areaLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/area"
-        android:textSize="@dimen/detail_label"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintEnd_toStartOf="@id/area"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/area"
-        app:layout_constraintTop_toTopOf="@id/area"
-        />
+        <TextView
+            android:id="@+id/capitalName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/detail_label"
+            android:maxLines="3"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            android:layout_marginTop="@dimen/country_item_margin_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/capitalLabel"
+            app:layout_constraintTop_toBottomOf="@id/countryName"
+            android:text="@string/loading"
+            tools:text="Capital Name" />
 
-    <TextView
-        android:id="@+id/area"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/detail_label"
-        android:layout_marginTop="@dimen/country_item_margin_top"
-        android:textAlignment="textEnd"
-        android:ellipsize="end"
-        android:maxLines="3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/areaLabel"
-        app:layout_constraintTop_toBottomOf="@id/population"
-        app:layout_constraintBottom_toTopOf="@id/region"
-        android:text="@string/loading"
-        tools:text="Area Name"
-        />
+        <TextView
+            android:id="@+id/populationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/population"
+            android:textSize="@dimen/detail_label"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/population"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/population"
+            app:layout_constraintBottom_toBottomOf="@id/population"
+            />
 
-    <TextView
-        android:id="@+id/regionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/region"
-        android:textSize="@dimen/detail_label"
-        android:textStyle="bold"
-        android:textAlignment="textEnd"
-        android:ellipsize="end"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintEnd_toStartOf="@id/region"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/region"
-        app:layout_constraintBottom_toBottomOf="@id/region"
-        />
+        <TextView
+            android:id="@+id/population"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/detail_label"
+            android:layout_marginTop="@dimen/country_item_margin_top"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/populationLabel"
+            app:layout_constraintTop_toBottomOf="@id/capitalName"
+            app:layout_constraintBottom_toTopOf="@id/area"
+            android:text="@string/loading"
+            tools:text="Population No"
+            />
 
-    <TextView
-        android:id="@+id/region"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/detail_label"
-        android:layout_marginTop="@dimen/country_item_margin_top"
-        android:textAlignment="textEnd"
-        android:ellipsize="end"
-        android:maxLines="3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/regionLabel"
-        app:layout_constraintTop_toBottomOf="@id/area"
-        app:layout_constraintBottom_toTopOf="@id/subRegion"
-        android:text="@string/loading"
-        tools:text="Region Name"
-        />
+        <TextView
+            android:id="@+id/areaLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/area"
+            android:textSize="@dimen/detail_label"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/area"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/area"
+            app:layout_constraintTop_toTopOf="@id/area"
+            />
 
-    <TextView
-        android:id="@+id/subRegionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/subregion"
-        android:textSize="@dimen/detail_label"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintEnd_toStartOf="@id/subRegion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/subRegion"
-        app:layout_constraintBottom_toBottomOf="@id/subRegion"
-        />
+        <TextView
+            android:id="@+id/area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/detail_label"
+            android:layout_marginTop="@dimen/country_item_margin_top"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/areaLabel"
+            app:layout_constraintTop_toBottomOf="@id/population"
+            app:layout_constraintBottom_toTopOf="@id/region"
+            android:text="@string/loading"
+            tools:text="Area Name"
+            />
 
-    <TextView
-        android:id="@+id/subRegion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/detail_label"
-        android:layout_marginTop="@dimen/country_item_margin_top"
-        android:textAlignment="textEnd"
-        android:ellipsize="end"
-        android:maxLines="3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/subRegionLabel"
-        app:layout_constraintTop_toBottomOf="@id/region"
-        android:text="@string/loading"
-        tools:text="Sub Region Name"
-        />
+        <TextView
+            android:id="@+id/regionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/region"
+            android:textSize="@dimen/detail_label"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/region"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/region"
+            app:layout_constraintBottom_toBottomOf="@id/region"
+            />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="@id/subRegion"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        <TextView
+            android:id="@+id/region"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/detail_label"
+            android:layout_marginTop="@dimen/country_item_margin_top"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/regionLabel"
+            app:layout_constraintTop_toBottomOf="@id/area"
+            app:layout_constraintBottom_toTopOf="@id/subRegion"
+            android:text="@string/loading"
+            tools:text="Region Name"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/subRegionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subregion"
+            android:textSize="@dimen/detail_label"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintEnd_toStartOf="@id/subRegion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/subRegion"
+            app:layout_constraintBottom_toBottomOf="@id/subRegion"
+            />
+
+        <TextView
+            android:id="@+id/subRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/detail_label"
+            android:layout_marginTop="@dimen/country_item_margin_top"
+            android:textAlignment="textEnd"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/subRegionLabel"
+            app:layout_constraintTop_toBottomOf="@id/region"
+            android:text="@string/loading"
+            tools:text="Sub Region Name"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/countryName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

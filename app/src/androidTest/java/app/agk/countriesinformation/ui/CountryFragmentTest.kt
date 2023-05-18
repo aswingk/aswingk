@@ -35,8 +35,10 @@ internal class CountryFragmentTest {
         mainActivity = activityScenarioRule.scenario
     }
 
+    val timeoutInMillis = 2500L
+
     @Test
-    fun basicScenarioTest(){
+    fun mainScenarioTest(){
 
         val context = ApplicationProvider.getApplicationContext<Context>()
         val displayedList = context.resources
@@ -45,6 +47,7 @@ internal class CountryFragmentTest {
 
         assertTrue(!displayedList.isEmpty())
 
+        // test with random element
         onView(withId(R.id.countriesRecyclerView))
             .perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(20))
             .check(matches(
@@ -55,6 +58,9 @@ internal class CountryFragmentTest {
         onView(withText(displayedList.get(20)))
             .check(matches(isDisplayed()))
 
+        Thread.sleep(timeoutInMillis)
+
+        // test with middle element
         val countryPosition = displayedList.size/2
         val countryName = displayedList.get(countryPosition)
 
@@ -68,7 +74,7 @@ internal class CountryFragmentTest {
         onView(withText(countryName))
             .check(matches(isDisplayed()))
 
-        Thread.sleep(500)
+        Thread.sleep(timeoutInMillis)
 
         onView(withText(countryName))
             .check(matches(isDisplayed()))
@@ -77,12 +83,9 @@ internal class CountryFragmentTest {
         onView(withText(countryName))
             .check(matches(isDisplayed()))
 
-        onView(withText("Population:"))
-            .check(matches(isDisplayed()))
-
         onView(withId(R.id.population))
             .check(matches(isDisplayed()))
 
-        Thread.sleep(500)
+        Thread.sleep(timeoutInMillis)
     }
 }

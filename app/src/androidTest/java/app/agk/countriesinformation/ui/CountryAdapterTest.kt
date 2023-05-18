@@ -1,12 +1,14 @@
 package app.agk.countriesinformation.ui
 
+import android.widget.TextView
 import androidx.annotation.UiThread
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
-import app.agk.countriesinformation.countryinfo.CountryAdapter
-import app.agk.countriesinformation.countryinfo.CountryItemClickListener
+import app.agk.countriesinformation.countrylist.ui.CountryAdapter
+import app.agk.countriesinformation.countrylist.ui.CountryItemClickListener
 import junit.framework.TestCase.assertEquals
+import app.agk.countriesinformation.R
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -43,6 +45,7 @@ internal class CountryAdapterTest {
         }
         val viewHolder = adapter.onCreateViewHolder(parent, 0)
         adapter.onBindViewHolder(viewHolder, 1)
-        assertEquals("India", viewHolder.countryName)
+        val countryName = viewHolder.itemView.findViewById<TextView>(R.id.countryName).text
+        assertEquals("India", countryName)
     }
 }
