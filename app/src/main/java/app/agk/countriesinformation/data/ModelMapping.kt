@@ -17,9 +17,9 @@ fun CountryInfo.asCountry() = Country(
     mapInfoUrl = mapInfoUrl
 )
 
-fun CountryInfoNetworkData.asEntity() = CountryInfo(
+fun CountryInfoNetworkData.asEntityWithName(countryName : String) = CountryInfo(
     id = UUID.randomUUID().toString(),
-    name = name?.common ?: "",
+    name = countryName,
     capital = capital ?: listOf(),
     population = population ?: 0L,
     area = area ?: 0.0,

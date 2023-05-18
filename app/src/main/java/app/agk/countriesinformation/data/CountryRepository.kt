@@ -37,7 +37,7 @@ class CountryRepository private constructor(
             localDataSource.addOrUpdateCountryInfo(
                 response
                     .await()
-                    .asEntity()
+                    .asEntityWithName(countryName)
             )
         }
     }
