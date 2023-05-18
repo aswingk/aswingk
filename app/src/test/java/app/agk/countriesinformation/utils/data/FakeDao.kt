@@ -1,4 +1,4 @@
-package app.agk.countriesinformation.utils
+package app.agk.countriesinformation.utils.data
 
 import app.agk.countriesinformation.data.source.local.CountryDao
 import app.agk.countriesinformation.data.source.local.CountryInfo

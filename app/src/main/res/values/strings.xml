@@ -15,6 +15,7 @@
     <string name="subregion">SubRegion:</string>
     <string name="region">Region:</string>
 
-    <string name="no_data">Unable to fetch Country Details</string>
-    <string name="network_error">Network Error</string>
+    <string name="server_error">Unable to fetch Country Details [Server Error]</string>
+    <string name="network_error">Network Error, Please connect to Internet and try again</string>
+    <string name="unconfined_error">Something went wrong, Please try later</string>
 </resources>

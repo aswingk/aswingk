@@ -14,24 +14,20 @@ abstract class CountryDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE: CountryDatabase? = null
+        private var instance: CountryDatabase? = null
         fun getInstance(context: Context): CountryDatabase {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    if (INSTANCE == null)
-                        Room
-                            .databaseBuilder(
-                                context.applicationContext,
-                                CountryDatabase::class.java,
-                                "country_db"
-                            )
-                            .fallbackToDestructiveMigration()
-                            .build().also {
-                                INSTANCE = it
-                            }
-                }
+            return instance ?: synchronized(this) {
+                instance ?: Room
+                    .databaseBuilder(
+                        context.applicationContext,
+                        CountryDatabase::class.java,
+                        "country_db"
+                    )
+                    .fallbackToDestructiveMigration()
+                    .build().also {
+                        instance = it
+                    }
             }
-            return INSTANCE!!
         }
     }
 }

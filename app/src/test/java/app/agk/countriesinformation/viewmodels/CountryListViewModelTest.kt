@@ -1,18 +1,21 @@
-package app.agk.countriesinformation.countryinfo
+package app.agk.countriesinformation.viewmodels
 
+import app.agk.countriesinformation.countryinfo.CountryListViewModel
 import app.agk.countriesinformation.utils.MainCoroutineRule
-import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CountryListViewModelTest {
 
     lateinit var countryListViewModel : CountryListViewModel
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
 
@@ -22,19 +25,22 @@ class CountryListViewModelTest {
     }
 
     @Test
-    fun loadCountryList() = runBlockingTest{
+    fun loadCountryList() = runBlocking {
 
         val actualList = listOf("USA", "Antarctica")
         var newList = listOf<String>()
-        val job = launch {
+        val job = async {
             countryListViewModel.fetchList {
                 actualList
-            }.collect {
-                newList = it
-            }
+            }.take(1)
+                .collect {
+                    newList = it
+                }
         }
 
-        TestCase.assertEquals(newList, actualList)
+        job.await()
+
+        assertEquals(newList, actualList)
 
         job.cancel()
     }

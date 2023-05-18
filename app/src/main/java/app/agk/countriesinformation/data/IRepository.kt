@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface IRepository {
 
-    fun fetchCountryInfo(countryName: String): Flow<Country?>
+    suspend fun fetchCountryInfo(countryName: String): Flow<Country?>
 
     suspend fun tryDownloadAndStoreCountryInfo(countryName : String)
 

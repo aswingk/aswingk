@@ -32,12 +32,21 @@ internal class LocalDataSourceTest {
     @Test
     fun fetchCountryInfo() = runBlocking {
         val actual = getCountryInfo()
-        localDataSource.addOrUpdateCountryInfo(actual)
+        with(localDataSource){
+            invokeDatabase {
+                addOrUpdateCountryInfo(actual)
+            }
+        }
         Assert.assertTrue(actual == localDataSource.fetchCountryInfo(actual.name).first())
     }
 
     @Test
     fun fetchCountryInfoWhenNoData() = runBlocking {
-        Assert.assertTrue(localDataSource.fetchCountryInfo("name").firstOrNull() == null)
+        with(localDataSource){
+            Assert.assertNull(
+                invokeDatabase {
+                    fetchCountryInfo("name").firstOrNull()
+                })
+        }
     }
 }
