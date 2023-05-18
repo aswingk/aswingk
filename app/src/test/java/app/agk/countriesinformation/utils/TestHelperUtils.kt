@@ -1,10 +1,9 @@
 package app.agk.countriesinformation.utils
 
-import app.agk.countriesinformation.data.source.local.CountryInfo
-import app.agk.countriesinformation.data.source.network.responses.CountryInfoNetworkData
-import app.agk.countriesinformation.data.source.network.responses.MapsInfo
-import app.agk.countriesinformation.data.source.network.responses.NameDetails
-import java.util.UUID
+import app.agk.countriesinformation.countrydetail.data.local.CountryInfo
+import app.agk.countriesinformation.countrydetail.data.network.responses.CountryInfoNetworkData
+import app.agk.countriesinformation.countrydetail.data.network.responses.MapsInfo
+import java.util.*
 
 private fun generateId() = UUID.randomUUID().toString()
 
@@ -20,7 +19,6 @@ fun getCountryInfo() = CountryInfo(
 )
 
 fun getCountryInfoNetworkData() = CountryInfoNetworkData(
-        name = NameDetails("USA"),
         area = 1230.0,
         subregion = "Peachtree Corners",
         region = "Georgia",

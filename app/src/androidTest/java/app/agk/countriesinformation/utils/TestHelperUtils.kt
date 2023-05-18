@@ -1,6 +1,6 @@
 package app.agk.countriesinformation.utils
 
-import app.agk.countriesinformation.data.source.local.CountryInfo
+import app.agk.countriesinformation.countrydetail.data.local.CountryInfo
 import java.util.*
 
 private fun generateId() = UUID.randomUUID().toString()
