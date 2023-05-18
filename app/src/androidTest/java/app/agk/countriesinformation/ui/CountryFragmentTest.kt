@@ -1,4 +1,4 @@
-package app.agk.countriesinformation.countryinfo
+package app.agk.countriesinformation.ui
 
 import android.content.Context
 import androidx.annotation.UiThread

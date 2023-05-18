@@ -1,9 +1,8 @@
 package app.agk.countriesinformation.data
 
-import android.util.Log
-import app.agk.countriesinformation.TAG
 import app.agk.countriesinformation.data.source.local.LocalDataSource
 import app.agk.countriesinformation.data.source.network.NetworkDataSource
+import app.agk.countriesinformation.utils.CustomThrowable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -15,16 +14,19 @@ class CountryRepository private constructor(
     private val remoteDataSource : NetworkDataSource
 ) : IRepository {
 
-    override suspend fun fetchCountryInfo(countryName: String): Flow<Country?> {
-        return localDataSource.fetchCountryInfo(countryName)
-            .map {
-//                Log.d(TAG, "FetchCountryInfo: $countryName ... ... ...  $it")
+    override suspend fun fetchCountryInfo(countryName : String) : Flow<Resource> {
+        return localDataSource.fetchCountryInfo(countryName).map {
+            try {
+//                Log.d(TAG, "fetchCountryInfo: $countryName ... ... ... $it")
                 if (it == null) {
                     tryDownloadAndStoreCountryInfo(countryName)
-                }
-
-                it?.asCountry()
+                    Resource.Loading()
+                } else
+                    Resource.Success(it.asCountry())
+            } catch (throwable: CustomThrowable) {
+                Resource.Failure(throwable)
             }
+        }
     }
 
     override suspend fun tryDownloadAndStoreCountryInfo(countryName: String) {

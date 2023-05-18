@@ -3,6 +3,9 @@ package app.agk.countriesinformation.utils.data
 import androidx.annotation.VisibleForTesting
 import app.agk.countriesinformation.data.Country
 import app.agk.countriesinformation.data.IRepository
+import app.agk.countriesinformation.data.Resource
+import app.agk.countriesinformation.utils.CustomThrowable
+import app.agk.countriesinformation.utils.ErrorState
 import kotlinx.coroutines.flow.*
 
 class FakeRepository : IRepository {
@@ -19,20 +22,27 @@ class FakeRepository : IRepository {
         shouldThrowError = value
     }
 
-    override suspend fun fetchCountryInfo(countryName: String): Flow<Country?> {
+    override suspend fun fetchCountryInfo(countryName: String): Flow<Resource> {
         return countryInfoObservable.map {
             it.firstOrNull {
                 it?.name == countryName
             }
         }.map {
-            if(it == null) tryDownloadAndStoreCountryInfo(countryName)
-            it
+            try {
+                if (it == null) {
+                    tryDownloadAndStoreCountryInfo(countryName)
+                    Resource.Loading()
+                } else
+                    Resource.Success(it)
+            } catch (throwable: CustomThrowable) {
+                Resource.Failure(throwable)
+            }
         }
     }
 
     override suspend fun tryDownloadAndStoreCountryInfo(countryName: String) {
         if (shouldThrowError) {
-            throw Exception("Test exception")
+            throw CustomThrowable(ErrorState.DatabaseError, Throwable("Test exception"))
         }
     }
 

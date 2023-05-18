@@ -45,6 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/capitalLabel"
         app:layout_constraintTop_toBottomOf="@id/countryName"
+        android:text="@string/loading"
         tools:text="Capital Name" />
 
     <TextView
@@ -75,6 +76,7 @@
         app:layout_constraintStart_toEndOf="@id/populationLabel"
         app:layout_constraintTop_toBottomOf="@id/capitalName"
         app:layout_constraintBottom_toTopOf="@id/area"
+        android:text="@string/loading"
         tools:text="Population No"
         />
 
@@ -106,6 +108,7 @@
         app:layout_constraintStart_toEndOf="@id/areaLabel"
         app:layout_constraintTop_toBottomOf="@id/population"
         app:layout_constraintBottom_toTopOf="@id/region"
+        android:text="@string/loading"
         tools:text="Area Name"
         />
 
@@ -139,6 +142,7 @@
         app:layout_constraintStart_toEndOf="@id/regionLabel"
         app:layout_constraintTop_toBottomOf="@id/area"
         app:layout_constraintBottom_toTopOf="@id/subRegion"
+        android:text="@string/loading"
         tools:text="Region Name"
         />
 
@@ -169,6 +173,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/subRegionLabel"
         app:layout_constraintTop_toBottomOf="@id/region"
+        android:text="@string/loading"
         tools:text="Sub Region Name"
         />
 

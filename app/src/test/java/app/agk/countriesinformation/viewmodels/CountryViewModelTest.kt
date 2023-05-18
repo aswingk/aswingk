@@ -1,8 +1,8 @@
 package app.agk.countriesinformation.viewmodels
 
 import app.agk.countriesinformation.R
+import app.agk.countriesinformation.countrydetail.DisplayCountryDetailsUIState
 import app.agk.countriesinformation.countryinfo.CountryViewModel
-import app.agk.countriesinformation.countryinfo.DisplayCountryDetailsUiState
 import app.agk.countriesinformation.data.asCountry
 import app.agk.countriesinformation.utils.MainCoroutineRule
 import app.agk.countriesinformation.utils.data.FakeRepository
@@ -10,7 +10,6 @@ import app.agk.countriesinformation.utils.getCountryInfo
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -47,21 +46,20 @@ internal class CountryViewModelTest{
 
     @Test
     fun loadCountryUnavailable() = runTest {
-        Dispatchers.setMain(StandardTestDispatcher())
 
         var isLoading = true
         var region = ""
         val job = launch {
             countryViewModel.detailUIState
-                .map {
+                .collect {
                     region = it.region
                     isLoading = it.isLoading
                 }
-                .collect {}
         }
 
         Assert.assertTrue(isLoading)
         assertEquals("", region)
+
         countryViewModel.fetchCountryData("Dummy")
 
         // Execute pending coroutines actions
@@ -83,7 +81,7 @@ internal class CountryViewModelTest{
     fun getActiveCountryFromRepositoryAndLoadIntoView() = runTest {
         Dispatchers.setMain(StandardTestDispatcher())
 
-        var uiState : DisplayCountryDetailsUiState? = null
+        var uiState : DisplayCountryDetailsUIState? = null
         val job = launch {
             countryViewModel.detailUIState.collect {
                 uiState = it
@@ -110,7 +108,7 @@ internal class CountryViewModelTest{
     fun countryViewModel_repositoryError() = runTest {
         Dispatchers.setMain(StandardTestDispatcher())
 
-        var uiState : DisplayCountryDetailsUiState? = null
+        var uiState : DisplayCountryDetailsUIState? = null
         val job = launch {
             countryViewModel.detailUIState.collect {
                 uiState = it

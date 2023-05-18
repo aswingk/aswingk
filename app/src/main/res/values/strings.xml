@@ -14,6 +14,7 @@
     <string name="area">Area:</string>
     <string name="subregion">SubRegion:</string>
     <string name="region">Region:</string>
+    <string name="loading">Loading..</string>
 
     <string name="server_error">Unable to fetch Country Details [Server Error]</string>
     <string name="network_error">Network Error, Please connect to Internet and try again</string>

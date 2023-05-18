@@ -49,7 +49,9 @@ internal class CountryRepositoryTest {
 
         val job = async {
             countryRepository.fetchCountryInfo(countryName).collect {
-                assertEquals(it?.name, name)
+                if(it is Resource.Success){
+                    assertEquals(it.value.name, name)
+                }
                 name = countryName
             }
         }
@@ -70,8 +72,8 @@ internal class CountryRepositoryTest {
         var name = ""
         val job = async {
             countryRepository.fetchCountryInfo("countryName").collect {
-                it?.let {
-                    name = it.name
+                if (it is Resource.Success) {
+                    name = it.value.name
                 }
             }
         }

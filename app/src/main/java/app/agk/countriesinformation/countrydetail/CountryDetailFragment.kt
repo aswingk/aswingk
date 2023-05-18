@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import app.agk.countriesinformation.countryinfo.CountryViewModel
-import app.agk.countriesinformation.countryinfo.DisplayCountryDetailsUiState
 import app.agk.countriesinformation.databinding.CountryDetailInfoBinding
 import app.agk.countriesinformation.utils.Injector
 import com.google.android.material.snackbar.Snackbar
@@ -33,7 +31,7 @@ class CountryDetailFragment : Fragment() {
         return binding.root
     }
 
-    private fun updateUI(displayCountryDetailsUiState : DisplayCountryDetailsUiState) {
+    private fun updateCountryDetailsInUI(displayCountryDetailsUiState : DisplayCountryDetailsUIState) {
 
         if (displayCountryDetailsUiState.isLoading) {
             binding.progressBar.visibility = View.VISIBLE
@@ -54,20 +52,23 @@ class CountryDetailFragment : Fragment() {
         }
     }
 
-    private fun setCountryNameUI(countryName: String) {
+    private fun updateUITitle(countryName: String) {
         binding.countryName.text = countryName
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val countryName = args.countryName
-        setCountryNameUI(countryName)
+
+        updateUITitle(countryName)
+
+        viewModel.detailUIState.asLiveData()
+            .observe(viewLifecycleOwner) {
+                updateCountryDetailsInUI(it)
+            }
 
         lifecycleScope.launch {
-            viewModel.fetchCountryData(countryName).flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .collect {
-                    updateUI(it)
-                }
+            viewModel.fetchCountryData(countryName)
         }
     }
 }
