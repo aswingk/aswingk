@@ -1,7 +1,6 @@
 package app.agk.countriesinformation.countrydetail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import app.agk.countriesinformation.TAG
 import app.agk.countriesinformation.countryinfo.CountryViewModel
 import app.agk.countriesinformation.countryinfo.DisplayCountryDetailsUiState
 import app.agk.countriesinformation.databinding.CountryDetailInfoBinding
@@ -43,11 +41,11 @@ class CountryDetailFragment : Fragment() {
         }
 
         binding.progressBar.visibility = View.GONE
-        binding.capitalName.setText(displayCountryDetailsUiState.capital)
-        binding.population.setText(displayCountryDetailsUiState.population)
-        binding.area.setText(displayCountryDetailsUiState.area)
-        binding.region.setText(displayCountryDetailsUiState.region)
-        binding.subRegion.setText(displayCountryDetailsUiState.subregion)
+        binding.capitalName.text = displayCountryDetailsUiState.capital
+        binding.population.text = displayCountryDetailsUiState.population
+        binding.area.text = displayCountryDetailsUiState.area
+        binding.region.text = displayCountryDetailsUiState.region
+        binding.subRegion.text = displayCountryDetailsUiState.subregion
 
         displayCountryDetailsUiState.userMessage?.let {
             Snackbar
@@ -57,15 +55,13 @@ class CountryDetailFragment : Fragment() {
     }
 
     private fun setCountryNameUI(countryName: String) {
-        binding.countryName.setText(countryName)
+        binding.countryName.text = countryName
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val countryName = args.countryName
         setCountryNameUI(countryName)
-
-        Log.d(TAG, "onViewCreated: Vm: ${viewModel}")
 
         lifecycleScope.launch {
             viewModel.fetchCountryData(countryName).flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)

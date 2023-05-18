@@ -1,4 +1,4 @@
-package app.agk.countriesinformation.utils
+package app.agk.countriesinformation.utils.data
 
 import androidx.annotation.VisibleForTesting
 import app.agk.countriesinformation.data.Country
@@ -19,7 +19,7 @@ class FakeRepository : IRepository {
         shouldThrowError = value
     }
 
-    override fun fetchCountryInfo(countryName: String): Flow<Country?> {
+    override suspend fun fetchCountryInfo(countryName: String): Flow<Country?> {
         return countryInfoObservable.map {
             it.firstOrNull {
                 it?.name == countryName

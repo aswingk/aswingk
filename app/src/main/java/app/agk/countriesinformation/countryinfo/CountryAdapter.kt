@@ -21,15 +21,17 @@ class CountryAdapter(private val countryItemClickListener : CountryItemClickList
 
     inner class CountryViewHolder(
         private val binding : CountryItemInfoBinding): ViewHolder(binding.root){
+
+        lateinit var countryName: String
         init {
             binding.root.setOnClickListener {
-                val item = getItem(layoutPosition)
-                countryItemClickListener.navigateToDetailView(item)
+                countryItemClickListener.navigateToDetailView(countryName)
             }
         }
 
         fun updateUI(name: String){
-            binding.countryName.setText(name)
+            countryName = name
+            binding.countryName.text = name
         }
     }
 

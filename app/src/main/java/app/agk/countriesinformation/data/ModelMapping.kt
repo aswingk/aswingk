@@ -1,3 +1,5 @@
+@file:Suppress("UNNECESSARY_SAFE_CALL", "USELESS_ELVIS")
+
 package app.agk.countriesinformation.data
 
 import app.agk.countriesinformation.data.source.local.CountryInfo
@@ -15,7 +17,6 @@ fun CountryInfo.asCountry() = Country(
     mapInfoUrl = mapInfoUrl
 )
 
-@Suppress("UNNECESSARY_SAFE_CALL")
 fun CountryInfoNetworkData.asEntity() = CountryInfo(
     id = UUID.randomUUID().toString(),
     name = name?.common ?: "",

@@ -1,22 +1,19 @@
 package app.agk.countriesinformation.data
 
 import app.agk.countriesinformation.data.source.local.LocalDataSource
-import app.agk.countriesinformation.utils.FakeDao
-import app.agk.countriesinformation.utils.FakeNetworkDataSource
 import app.agk.countriesinformation.utils.MainCoroutineRule
+import app.agk.countriesinformation.utils.data.FakeDao
+import app.agk.countriesinformation.utils.data.FakeNetworkDataSource
 import app.agk.countriesinformation.utils.getCountryInfoNetworkData
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
+import junit.framework.TestCase.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.concurrent.CountDownLatch
 
 internal class CountryRepositoryTest {
 
@@ -24,6 +21,7 @@ internal class CountryRepositoryTest {
     private lateinit var networkDataSource: FakeNetworkDataSource
     private lateinit var localDataSource: LocalDataSource
 
+    @ExperimentalCoroutinesApi
     @get:Rule
     val mainCoroutineRule = MainCoroutineRule()
 
@@ -44,27 +42,24 @@ internal class CountryRepositoryTest {
         )
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun getCountryDetailsFromNetwork() = runBlocking {
 
-        var name : String? = null
-        var result: String? = ""
+        var name: String? = null
 
-        val countDownLatch = CountDownLatch(2)
-
-        val job = launch {
+        val job = async {
             countryRepository.fetchCountryInfo(countryName).collect {
                 assertEquals(it?.name, name)
                 name = countryName
-                countDownLatch.countDown()
             }
         }
 
-        // Execute pending coroutines actions
-//         advanceUntilIdle()
+        assertNotSame(countryName, name)
 
-        countDownLatch.await()
+        // Execute pending coroutines actions
+        job.await()
+
+        assertSame(countryName, name)
 
         job.cancel()
     }
@@ -73,7 +68,7 @@ internal class CountryRepositoryTest {
     @Test
     fun getCountryWhenNoNetwork() = runTest {
         var name = ""
-        val job = launch {
+        val job = async {
             countryRepository.fetchCountryInfo("countryName").collect {
                 it?.let {
                     name = it.name

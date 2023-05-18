@@ -1,13 +1,16 @@
-package app.agk.countriesinformation.countryinfo
+package app.agk.countriesinformation.viewmodels
 
 import app.agk.countriesinformation.R
+import app.agk.countriesinformation.countryinfo.CountryViewModel
+import app.agk.countriesinformation.countryinfo.DisplayCountryDetailsUiState
 import app.agk.countriesinformation.data.asCountry
-import app.agk.countriesinformation.utils.FakeRepository
 import app.agk.countriesinformation.utils.MainCoroutineRule
+import app.agk.countriesinformation.utils.data.FakeRepository
 import app.agk.countriesinformation.utils.getCountryInfo
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -44,25 +47,30 @@ internal class CountryViewModelTest{
 
     @Test
     fun loadCountryUnavailable() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher())
+
         var isLoading = true
         var region = ""
         val job = launch {
-            countryViewModel.detailUIState.collect {
-                region = it.region
-                isLoading = it.isLoading
-            }
+            countryViewModel.detailUIState
+                .map {
+                    region = it.region
+                    isLoading = it.isLoading
+                }
+                .collect {}
         }
 
         Assert.assertTrue(isLoading)
-        assertEquals(region,"")
+        assertEquals("", region)
         countryViewModel.fetchCountryData("Dummy")
 
         // Execute pending coroutines actions
         advanceUntilIdle()
 
-        assertEquals(region,"")
+        assertEquals("", region)
 
         countryViewModel.fetchCountryData(country.name)
+
         // Execute pending coroutines actions
         advanceUntilIdle()
 
@@ -88,11 +96,11 @@ internal class CountryViewModelTest{
         advanceUntilIdle()
 
         // Then verify that the view was notified
-        uiState?.apply {
-            assertEquals(region, country.region)
-            assertEquals(subregion, country.subregion)
-            assertEquals(population, "${country.population}")
-            assertEquals(area, "${country.area}")
+        with(uiState) {
+            assertEquals(this?.region, country.region)
+            assertEquals(this?.subregion, country.subregion)
+            assertEquals(this?.population, "${country.population}")
+            assertEquals(this?.area, "${country.area}")
         }
 
         job.cancel()
@@ -118,7 +126,7 @@ internal class CountryViewModelTest{
         advanceUntilIdle()
 
         assert(uiState?.isLoading == false)
-        assertEquals(uiState?.userMessage, R.string.no_data)
+        assertEquals(uiState?.userMessage, R.string.unconfined_error)
 
         job.cancel()
     }
