@@ -19,4 +19,7 @@
     <string name="server_error">Unable to fetch Country Details [Server Error]</string>
     <string name="network_error">Network Error, Please connect to Internet and try again</string>
     <string name="unconfined_error">Something went wrong, Please try later</string>
+    <string name="search_menu">Search</string>
+    <string name="sort_menu">Sort</string>
+    <string name="please_fine_tune_the_filters_to_see_results">Please fine tune the filters to see results</string>
 </resources>
