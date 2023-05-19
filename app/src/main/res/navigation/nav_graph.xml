@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/CountryInfoFragment">
+    app:startDestination="@id/CountryFragment">
 
     <fragment
-        android:id="@+id/CountryInfoFragment"
-        android:name="app.agk.countriesinformation.countryinfo.CountryInfoFragment"
+        android:id="@+id/CountryFragment"
+        android:name="app.agk.countriesinformation.countrylist.ui.CountryFragment"
         android:label="@string/country_fragment_name">
 
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/CountryDetailInfoFragment"
-        android:name="app.agk.countriesinformation.countrydetail.CountryDetailInfoFragment"
+        android:name="app.agk.countriesinformation.countrydetail.ui.CountryDetailFragment"
         android:label="@string/country_detail_fragment_name"
         tools:layout="@layout/country_detail_info">
 
@@ -29,6 +29,6 @@
 
         <action
             android:id="@+id/action_detail_to_list_info"
-            app:destination="@id/CountryInfoFragment" />
+            app:destination="@id/CountryFragment" />
     </fragment>
 </navigation>
