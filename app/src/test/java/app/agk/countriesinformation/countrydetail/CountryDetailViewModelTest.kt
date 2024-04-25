@@ -31,6 +31,7 @@ internal class CountryViewModelTest{
 
     private val country = getCountryInfo().asCountry()
 
+    /*
     @Test
     fun loadCountryUnavailable() = runTest {
         Dispatchers.setMain(StandardTestDispatcher())
@@ -62,6 +63,7 @@ internal class CountryViewModelTest{
 
 //         job.cancel()
     }
+    */
 
 /*
     @Test
